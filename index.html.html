@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peachy</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        :root {
+            --barbie-pink: #ff69b4;
+            --pastel-pink: #fff0f5;
+            --deep-pink: #e04494;
+            --white: #ffffff;
+            --dark-bg: #2d1b24;
+            --dark-text: #fff0f5;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--pastel-pink);
+            color: #4a4a4a;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+        header {
+            background: linear-gradient(135deg, var(--barbie-pink), var(--deep-pink));
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            display: flex;
+            border-top: 2px solid #ffb6c1;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+            z-index: 100;
+        }
+
+        .nav-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 12px 0;
+            font-size: 12px;
+            color: #8a8a8a;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .nav-btn.active {
+            color: var(--deep-pink);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.15);
+            border: 1px solid rgba(255, 182, 193, 0.5);
+        }
+
+        .pink-btn {
+            background: linear-gradient(to right, var(--barbie-pink), var(--deep-pink));
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(255, 105, 180, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .pink-btn:active {
+            transform: scale(0.97);
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ffb6c1;
+            border-radius: 25px;
+            box-sizing: border-box;
+            font-size: 15px;
+            margin-bottom: 15px;
+            outline: none;
+            color: #4a4a4a;
+        }
+
+        .search-box:focus {
+            border-color: var(--barbie-pink);
+        }
+
+        .media-item {
+            background: #fff5f8;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--barbie-pink);
+            cursor: pointer;
+        }
+
+        .wheel-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .audio-wheel {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ffb6c1 10%, #ff69b4 30%, #e04494 70%, #333 71%, #111 100%);
+            border: 8px solid white;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .audio-wheel::after {
+            content: '';
+            width: 30px;
+            height: 30px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .spinning {
+            animation: spin 6s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        .slider-container {
+            margin: 15px 0;
+        }
+
+        .timeline {
+            width: 100%;
+            -webkit-appearance: none;
+            background: #ffd1dc;
+            height: 6px;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .timeline::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--deep-pink);
+            cursor: pointer;
+        }
+
+        .controls-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .speed-selector {
+            padding: 6px 12px;
+            border: 2px solid #ffb6c1;
+            border-radius: 15px;
+            background: white;
+            color: var(--deep-pink);
+            font-weight: bold;
+            outline: none;
+        }
+
+        .hidden-file {
+            display: none;
+        }
+
+        video {
+            width: 100%;
+            border-radius: 12px;
+            background: #000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .book-viewer {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            height: 300px;
+            overflow-y: auto;
+            border: 2px solid #ffb6c1;
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        .dark-mode-reader {
+            background-color: var(--dark-bg) !important;
+            color: var(--dark-text) !important;
+            border-color: var(--deep-pink) !important;
+        }
+    </style>
+</head>
+<body>
+
+    <header id="appHeader">✨ Peachy ✨</header>
+
+
+    <div class="main-content">
+        
+        <!-- PAGE 1: HOME DASHBOARD -->
+        <div id="pageHome" class="page active">
+            <div class="card" style="text-align: center;">
+                <h2>Welcome to Your Sparkly Kingdom</h2>
+                <p>All your favorite pieces match perfectly inside your private device memory!</p>
+            </div>
+            
+            <div class="card">
+                <h3>Your Library Statistics</h3>
+                <div class="media-item"><span>🎵 Total Audio Tracks</span><span id="countAudio" style="font-weight:bold;">0</span></div>
+                <div class="media-item"><span>🎬 Total Video Files</span><span id="countVideo" style="font-weight:bold;">0</span></div>
+                <div class="media-item"><span>📖 Total Story Books</span><span id="countBook" style="font-weight:bold;">0</span></div>
+            </div>
+        </div>
+        <!-- PAGE 2: AUDIO PLAYER -->
+        <div id="pageAudio" class="page">
+            <input type="text" id="searchAudio" class="search-box" placeholder="Search your audio tracks...">
+            
+            <div class="card" style="text-align: center;">
+                <input type="file" id="fileAudio" class="hidden-file" accept="audio/*" multiple>
+                <button class="pink-btn" onclick="document.getElementById('fileAudio').click()">✨ Import Audio File</button>
+                
+                <div class="wheel-container">
+                    <div id="audioWheel" class="audio-wheel"></div>
+                </div>
+                <h4 id="currentAudioTitle" style="margin: 5px 0;">No Track Selected</h4>
+                
+                <div class="slider-container">
+                    <input type="range" id="audioTimeline" class="timeline" value="0" min="0" step="1">
+                </div>
+
+                <div class="controls-row">
+                    <button class="pink-btn" id="btnAudioRewind">⏮ 10s</button>
+                    <button class="pink-btn" id="btnAudioPlay">▶ Play</button>
+                    <button class="pink-btn" id="btnAudioStop">⏹ Stop</button>
+                    <button class="pink-btn" id="btnAudioForward">10s ⏭</button>
+                    <select id="speedAudio" class="speed-selector">
+                        <option value="0.5">0.5x</option>
+                        <option value="0.75">0.75x</option>
+                        <option value="1" selected>1.0x</option>
+                        <option value="2">2.0x</option>
+                        <option value="3">3.0x</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Track Library</h3>
+                <div id="listAudio"></div>
+            </div>
+        </div>
+        <!-- PAGE 3: VIDEO PLAYER -->
+        <div id="pageVideo" class="page">
+            <input type="text" id="searchVideo" class="search-box" placeholder="Search your video clips...">
+            
+            <div class="card" style="text-align: center;">
+                <input type="file" id="fileVideo" class="hidden-file" accept="video/*" multiple>
+                <button class="pink-btn" onclick="document.getElementById('fileVideo').click()">✨ Import Video File</button>
+                
+                <div style="margin: 15px 0;">
+                    <video id="mainVideoPlayer" playsinline></video>
+                </div>
+                <h4 id="currentVideoTitle" style="margin: 5px 0;">No Video Selected</h4>
+
+                <div class="slider-container">
+                    <input type="range" id="videoTimeline" class="timeline" value="0" min="0" step="1">
+                </div>
+
+                <div class="controls-row">
+                    <button class="pink-btn" id="btnVideoRewind">⏮ 10s</button>
+                    <button class="pink-btn" id="btnVideoPlay">▶ Play</button>
+                    <button class="pink-btn" id="btnVideoStop">⏹ Stop</button>
+                    <button class="pink-btn" id="btnVideoForward">10s ⏭</button>
+                    <select id="speedVideo" class="speed-selector">
+                        <option value="0.5">0.5x</option>
+                        <option value="0.75">0.75x</option>
+                        <option value="1" selected>1.0x</option>
+                        <option value="2">2.0x</option>
+                        <option value="3">3.0x</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Video Library</h3>
+                <div id="listVideo"></div>
+            </div>
+        </div>
+
+        <!-- PAGE 4: BOOK READER -->
+        <div id="pageBook" class="page">
+            <input type="text" id="searchBook" class="search-box" placeholder="Search your book items...">
+            
+            <div class="card" style="text-align: center;">
+                <input type="file" id="fileBook" class="hidden-file" accept=".txt" multiple>
+                <button class="pink-btn" onclick="document.getElementById('fileBook').click()">✨ Import Book (.txt)</button>
+                
+                <div class="controls-row" style="margin: 15px 0; justify-content: space-between;">
+                    <button class="pink-btn" id="btnBookTheme">Toggle Mode 🌙</button>
+                    <select id="zoomBook" class="speed-selector">
+                        <option value="1">1x Text</option>
+                        <option value="2">2x Text</option>
+                        <option value="3">3x Text</option>
+                        <option value="4">4x Text</option>
+                        <option value="5">5x Text</option>
+                    </select>
+                </div>
+
+                <h4 id="currentBookTitle" style="margin: 5px 0; text-align: left;">No Book Open</h4>
+                <div id="mainBookViewer" class="book-viewer">Select a story from below to begin reading...</div>
+            </div>
+
+            <div class="card">
+                <h3>Story Library</h3>
+                <div id="listBook"></div>
+            </div>
+        </div>
+    </div> <!-- Closes .main-content -->
+
+    <!-- BOTTOM NAVIGATION BAR -->
+    <nav>
+        <button class="nav-btn active" onclick="switchPage('Home', this)">
+            <span class="nav-icon">🏰</span>Home
+        </button>
+        <button class="nav-btn" onclick="switchPage('Audio', this)">
+            <span class="nav-icon">🎵</span>Audio
+        </button>
+        <button class="nav-btn" onclick="switchPage('Video', this)">
+            <span class="nav-icon">🎬</span>Video
+        </button>
+        <button class="nav-btn" onclick="switchPage('Book', this)">
+            <span class="nav-icon">📖</span>Book
+        </button>
+    </nav>
+
+    <!-- Page Switcher Script Helper -->
+    <script>
+        function switchPage(pageId, buttonElement) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            // Show selected page
+            document.getElementById('page' + pageId).classList.add('active');
+            
+            // Un-highlight all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            // Highlight current button
+            buttonElement.classList.add('active');
+        }
+    </script>
+</body>
+</html>
