@@ -27,6 +27,7 @@
             overflow: hidden;
             user-select: none;
         }
+
         header {
             background: linear-gradient(135deg, var(--barbie-pink), var(--deep-pink));
             color: white;
@@ -93,6 +94,7 @@
             font-size: 20px;
             margin-bottom: 3px;
         }
+
         .card {
             background: white;
             border-radius: 15px;
@@ -183,13 +185,16 @@
         @keyframes spin {
             100% { transform: rotate(360deg); }
         }
+
         .slider-container {
             margin: 15px 0;
         }
 
+        /* FIXED SLIDER APPERANCE COMPATIBILITY */
         .timeline {
             width: 100%;
             -webkit-appearance: none;
+            appearance: none; 
             background: #ffd1dc;
             height: 6px;
             border-radius: 3px;
@@ -198,6 +203,7 @@
 
         .timeline::-webkit-slider-thumb {
             -webkit-appearance: none;
+            appearance: none; 
             width: 16px;
             height: 16px;
             border-radius: 50%;
@@ -253,9 +259,7 @@
     </style>
 </head>
 <body>
-
     <header id="appHeader">✨ Peachy ✨</header>
-
 
     <div class="main-content">
         
@@ -273,6 +277,7 @@
                 <div class="media-item"><span>📖 Total Story Books</span><span id="countBook" style="font-weight:bold;">0</span></div>
             </div>
         </div>
+
         <!-- PAGE 2: AUDIO PLAYER -->
         <div id="pageAudio" class="page">
             <input type="text" id="searchAudio" class="search-box" placeholder="Search your audio tracks...">
@@ -376,6 +381,7 @@
                 <div id="listBook"></div>
             </div>
         </div>
+
     </div> <!-- Closes .main-content -->
 
     <!-- BOTTOM NAVIGATION BAR -->
@@ -397,14 +403,10 @@
     <!-- Page Switcher Script Helper -->
     <script>
         function switchPage(pageId, buttonElement) {
-            // Hide all pages
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            // Show selected page
             document.getElementById('page' + pageId).classList.add('active');
             
-            // Un-highlight all nav buttons
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            // Highlight current button
             buttonElement.classList.add('active');
         }
     </script>
